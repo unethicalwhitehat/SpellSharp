@@ -3,19 +3,17 @@
 # Import modules
 
 import loginarea
+import os
 
 
 def MainMenu():
     print('''
-    Welcome to the spelling test system. Please select an option from below:
-    
+    Welcome to the spelling test system. Please select an option from below:    
+    -----------------------------------------------------------------------   
+    1) I'm a student   
+    2) I'm a teacher
+    3) Exit    
     -----------------------------------------------------------------------
-    
-    1) Log in as student    
-    2) Log in as teacher    
-    3) Exit
-    
-    -----------------------------------------------------------------------\n
     ''')
 
     def ChooseOption():
@@ -33,6 +31,7 @@ def MainMenu():
             exit()
         else:
             print("Please enter a valid choice.")
+    os.system('clear')
     ChooseOption()
 
 
