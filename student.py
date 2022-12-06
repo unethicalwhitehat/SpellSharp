@@ -1,6 +1,3 @@
-import loginarea
-
-
 def StudentMenu(username):
     print(f'''
     Welcome {username}, please select an option from below:

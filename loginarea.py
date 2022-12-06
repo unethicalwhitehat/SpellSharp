@@ -2,8 +2,17 @@ import getpass
 import teacher
 import student
 import hashlib
-import json
+import dblogin
+import re
+import random
+import datetime
 
+def GenSalt():
+    salt = os.urandom(32)
+    salt = base64.b64encode(salt).decode('utf-8')
+    return salt
+
+# Pepper as well?
 
 def Login(usertype):
     if usertype == "S":
@@ -14,7 +23,6 @@ def Login(usertype):
         2) Exit
         ----------------------------------------------------
         ''')
-
         choice = input("Enter your choice: ")
         try:
             choice = int(choice)
@@ -22,7 +30,7 @@ def Login(usertype):
             print("Please enter a number.")
             Login(usertype)
         if choice == 1:
-            EnterCreds("S")
+            LogIn(usertype)
         elif choice == 2:
             exit()
     elif usertype == "T":
@@ -42,7 +50,7 @@ def Login(usertype):
             print("Please enter a number.")
             Login(usertype)
         if choice == 1:
-            EnterCreds("T")
+            LogIn(usertype)
         elif choice == 2:
             SignUp(usertype)
         elif choice == 3:
@@ -54,40 +62,57 @@ def Login(usertype):
         print("Please enter a valid user type.")
         exit()
 
+def TeacherSignUp:
+    fname = input("Please enter your first name: ")
+    lname = input("Please enter your last name: ")
+    username = (f"{fname[0:1]}.{lname}{random.randint(0,100)}").lower()
+    dob = input("Please enter your date of birth (DD/MM/YYYY): ")
+    dob = datetime.datetime.strptime(dob, "%d/%m/%Y")
+    password = getpass.getpass("Enter password: ")
+    special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (len(password) < 8) or (password == username) or (password is alpha) or (password is numeric) or (special_char.search(password) is None):
+        print("Please enter a valid password. Your password must be at least 8 characters long, it cannot be your username, and must contain letters, numbers, and a symbol.")
+        SignUp(usertype)
+    else:
+        password.append(salt)
+        password = hashlib.sha256(password.encode()).hexdigest()
+        dblogin.TeacherSignUp(fname, lname, dob, username, password, salt)
+    # username = input("Choose username: ")
+    # if usertype == "S":
+    #     year = input("Enter year group: ")
+    #     teacher = input("Enter teacher's username: ")
+    # password = getpass.getpass("Choose password: ")
+    # special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    # if (len(password) < 8) or (password == username) or (password is alpha) or (password is numeric) or (special_char.search(password) is None):
+    #     print("Please enter a valid password. Your password must be at least 8 characters long, it cannot be your username, and must contain letters, numbers, and a symbol.")
+    #     SignUp(usertype)
+    # else:
+    #     password.append(salt)
+    #     password = hashlib.sha256(password.encode()).hexdigest()
+    #     if usertype == "S":
+    #         dblogin.StudentSignUp(username, password, salt, usertype, year, teacher)
+    #     elif usertype == "T":
+    #         dblogin.TeacherSignUp(username, password, salt, usertype)
+    # fname = input("Enter first name: ")
+    # lname = input("Enter last name: ")
+    # username = fname[0] + lname + random.randint(100, 1000)
 
-def EnterCreds(usertype):
-    with open("creds.txt", "r+") as file:
-        creds = file.read()
-        username = input("Enter username: ")
-        if username in creds:
-            password = getpass.getpass("Enter password: ")
-            password = hashlib.sha256(password.encode()).hexdigest()
-            if password in creds:
-                if usertype == "S":
-                    student.StudentMenu(username)
-                elif usertype == "T":
-                    teacher.TeacherMenu(username)
-                else:
-                    print("Please enter a valid user type.")
-                    Login()
-            else:
-                print("Incorrect password.")
-                Login()
-        else:
-            if usertype == "T":
-                print("Username not found. Please make sure it is correct, or sign up in the previous menu.")
-                Login(usertype)
-            else:
-                print("Your username was not found in the system. Please make sure you have entered it correctly or "
-                      "ask your teacher to create an account for you.")
+def StudentSignUp:
+    fname = input("Enter your first name")
+    lname = input("Enter your last name")
+    username = (f"{fname}.{lname}{random.randint(100, 1000)}").lower()
 
 
-def SignUp(usertype):
-    # Go through the text file to see if the username already exists. If it does, tell the user. If not,
-    # take a password, encrypt it and add it to the file alongside the username and a unique ID
-    username = input("Enter a username")
-    with open ("creds.txt", "a+") as file:
-        if username in
+def LogIn():
+    username = input("Enter username: ")
+    password = getpass.getpass("Enter password: ")
+    password = hashlib.sha256(password.encode()).hexdigest()
+    dblogin.LogIn(username, password)
 
-
-
+if action == "login":
+    LogIn()
+elif action == "signup":
+    SignUp(usertype)
+else:
+    print("Please enter a valid action.")
+    Login(usertype)
