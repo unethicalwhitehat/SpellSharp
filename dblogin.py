@@ -7,7 +7,6 @@ import datetime
 conn = sqlite3.connect("teacheraccounts.db")
 conn2 = sqlite3.connect("studentaccounts.db")
 
-
 c = conn.cursor()
 c2 = conn2.cursor()
 
@@ -26,22 +25,24 @@ else:
     (fname text), (lname text), (dob datetime), (username text), (password text), (salt text), (usertype text), (year text), (teacher text) ''')
 
 
-def TeacherSignUp(fname, llname, dob, username, password, salt):
+def TeacherSignUp(fname, lname, dob, username, password, salt):
     c.execute("INSERT INTO teacheraccounts VALUES (?, ?, ?, ?, ?, ?)", (fname, lname, dob, username, password, salt))
     conn.commit()
     print("Teacher created successfully.")
     conn.close()
-    Login(usertype)
+    TeacherLogin()
 
-def StudentSignUp(username, password, salt, usertype, year, teacher):
-    c2.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (fname, lname, dob, username, password, salt, usertype, year, teacher))
+
+def StudentSignUp(fname, lname, dob, username, password, salt, usertype, year, teacher):
+    c2.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+               (fname, lname, dob, username, password, salt, usertype, year, teacher))
     conn.commit()
     print("Student account created successfully.")
     conn2.close()
-    Login(usertype)
+    StudentLogin(username, password)
 
-attempts = 0
-def TeacherLogIn(username, password):
+
+def TeacherLogin(username, password, attempts=0):
     if attempts < 3:
         c.execute("SELECT * FROM teacheraccounts WHERE username = ? AND password = ?", (username, password))
         data = c.fetchall()
@@ -55,8 +56,7 @@ def TeacherLogIn(username, password):
             conn.close()
             loginarea.Login(usertype)
 
-
-# def Login(username, password):
+# def StudentLogin(username, password):
 #     c.execute("SELECT * FROM accounts WHERE uname = ? AND password = ?", (username, password))
 #     data = c.fetchall()
 #     if data:
