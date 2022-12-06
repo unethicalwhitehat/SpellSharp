@@ -1,3 +1,5 @@
+# Importing the necessary modules
+
 import base64
 import getpass
 import os
@@ -9,15 +11,16 @@ import dblogin
 import re
 import random
 import datetime
+import time
 
+
+# Function to generate the salt for the password
 
 def GenSalt():
     salt = os.urandom(32)
     salt = base64.b64encode(salt).decode('utf-8')
     return salt
 
-
-# Pepper as well?
 
 def ChooseOption(usertype):
     if usertype == "S":
@@ -28,15 +31,21 @@ def ChooseOption(usertype):
         2) Exit
         ----------------------------------------------------
         ''')
+        time.sleep(1)
         choice = input("Enter your choice: ")
+        time.sleep(1)
         try:
             choice = int(choice)
         except ValueError:
+            time.sleep(1)
             print("Please enter a number.")
+            time.sleep(2)
             ChooseOption(usertype)
         if choice == 1:
+            time.sleep(1)
             StudentLogin()
         elif choice == 2:
+            time.sleep(1)
             main.MainMenu()
     elif usertype == "T":
         print('''
@@ -57,7 +66,7 @@ def ChooseOption(usertype):
         if choice == 1:
             TeacherLogin()
         elif choice == 2:
-            StudentSignUp()
+            TeacherSignUp()
         elif choice == 3:
             main.MainMenu()
         else:
@@ -78,6 +87,20 @@ def EnterDob():
         EnterDob()
 
 
+def EnterYear():
+    year = input("Enter the year group you're in (3, 4, 5 or 6)")
+    try:
+        year = int(year)
+        if 3 > year > 6:
+            print("Please ensure you have entered the correct year")
+            EnterYear()
+        else:
+            return year
+    except ValueError:
+        print("You must enter a number. Please try again")
+        EnterYear()
+
+
 def TeacherSignUp():
     fname = input("Please enter your first name: ")
     lname = input("Please enter your last name: ")
@@ -95,35 +118,40 @@ def TeacherSignUp():
         password.append(salt)
         password = hashlib.sha256(password.encode()).hexdigest()
         dblogin.TeacherSignUp(fname, lname, dob, username, password, salt)
-    # username = input("Choose username: ")
-    # if usertype == "S":
-    #     year = input("Enter year group: ")
-    #     teacher = input("Enter teacher's username: ")
-    # password = getpass.getpass("Choose password: ")
-    # special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-    # if (len(password) < 8) or (password == username) or (password is alpha) or (password is numeric) or (special_char.search(password) is None):
-    #     print("Please enter a valid password. Your password must be at least 8 characters long, it cannot be your username, and must contain letters, numbers, and a symbol.")
-    #     SignUp(usertype)
-    # else:
-    #     password.append(salt)
-    #     password = hashlib.sha256(password.encode()).hexdigest()
-    #     if usertype == "S":
-    #         dblogin.StudentSignUp(username, password, salt, usertype, year, teacher)
-    #     elif usertype == "T":
-    #         dblogin.TeacherSignUp(username, password, salt, usertype)
-    # fname = input("Enter first name: ")
-    # lname = input("Enter last name: ")
-    # username = fname[0] + lname + random.randint(100, 1000)
+        print(f"Sign up successful. Your username is {username}")
 
 
 def StudentSignUp():
     fname = input("Enter your first name")
     lname = input("Enter your last name")
+    dob = EnterDob()
+    year = EnterYear()
+    teacher = input("Enter the last name of your teacher: ")
     username = f"{fname}.{lname}{random.randint(100, 1000)}".lower()
+    password = getpass.getpass("Choose a password")
+    special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (len(password) < 8) or (password == username) or (password.isalpha()) or (password.isnumeric()) or (
+            special_char.search(password) is None):
+        print(
+            "Please enter a valid password. Your password must be at least 8 characters long, it cannot be your "
+            "username, and must contain letters, numbers, and a symbol.")
+        StudentSignUp()
+    else:
+        salt = GenSalt()
+        password.append(salt)
+        password = hashlib.sha256(password.encode()).hexdigest()
+        dblogin.StudentSignUp(fname, lname, dob, username, password, salt, year, teacher)
+        print(f"Sign up successful. Your username is {username}")
+        time.sleep(3)
+        print("Taking you go the login page...")
+        time.sleep(2)
+        StudentLogin()
 
 
 def TeacherLogin():
-    print("Teacher login")
+    username = input("Enter your username: ")
+    password = getpass.getpass("Enter your password: ")
+    dblogin.TeacherLogin(username, password)
 
 
 def StudentLogin():

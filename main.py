@@ -4,8 +4,10 @@
 
 import loginarea
 import os
+import time
 
 
+# Function for the main menu
 def MainMenu():
     print('''
     Welcome to the spelling test system. Please select an option from below:    
@@ -16,21 +18,32 @@ def MainMenu():
     -----------------------------------------------------------------------
     ''')
 
+    # Function to choose an option
+
     def ChooseOption():
         choice = input("Enter your choice: ")
+        time.sleep(1)
         try:
             choice = int(choice)
         except ValueError:
             print("Please enter a number.")
+            time.sleep(1)
             ChooseOption()
         if choice == 1:
+            time.sleep(1)
             loginarea.ChooseOption("S")
         elif choice == 2:
+            time.sleep(1)
             loginarea.ChooseOption("T")
         elif choice == 3:
+            time.sleep(1)
+            print("Goodbye")
+            time.sleep(5)
             exit()
         else:
+            time.sleep(1)
             print("Please enter a valid choice.")
+
     os.system('clear')
     ChooseOption()
 

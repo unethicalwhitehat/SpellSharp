@@ -1,8 +1,11 @@
 import sqlite3
 import os
 import loginarea
-import hashlib
 import datetime
+import teacher
+import student
+import time
+import hashlib
 
 conn = sqlite3.connect("teacheraccounts.db")
 conn2 = sqlite3.connect("studentaccounts.db")
@@ -33,9 +36,9 @@ def TeacherSignUp(fname, lname, dob, username, password, salt):
     TeacherLogin()
 
 
-def StudentSignUp(fname, lname, dob, username, password, salt, usertype, year, teacher):
+def StudentSignUp(fname, lname, dob, username, password, salt, year, teacher):
     c2.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-               (fname, lname, dob, username, password, salt, usertype, year, teacher))
+               (fname, lname, dob, username, password, salt, year, teacher))
     conn.commit()
     print("Student account created successfully.")
     conn2.close()
@@ -43,27 +46,42 @@ def StudentSignUp(fname, lname, dob, username, password, salt, usertype, year, t
 
 
 def TeacherLogin(username, password, attempts=0):
+    c.execute("SELECT hash FROM teacheraccounts WHERE username = ?", username)
+    gatheredhash = c.fetchall()
+    password.append(gatheredhash)
+    password = hashlib.sha256(password.encode()).hexdigest()
     if attempts < 3:
         c.execute("SELECT * FROM teacheraccounts WHERE username = ? AND password = ?", (username, password))
         data = c.fetchall()
         if data:
             print("Login successful.")
             conn.close()
-            loginarea.TeacherMenu()
+            teacher.TeacherMenu()
         else:
             print("Login failed.")
             attempts += 1
-            conn.close()
-            loginarea.Login(usertype)
+            loginarea.TeacherLogin()
+    else:
+        print("Too many failed attempts")
+        exit()
 
-# def StudentLogin(username, password):
-#     c.execute("SELECT * FROM accounts WHERE uname = ? AND password = ?", (username, password))
-#     data = c.fetchall()
-#     if data:
-#         print("Login successful.")
-#         if usertype == "S":
-#             student.StudentMenu()
-#         elif usertype == "T":
-#             teacher.TeacherMenu()
-#     else:
-#         print("Login failed.")
+
+def StudentLogin(username, password, attempts=0):
+    c2.execute("SELECT hash FROM studentaccounts WHERE username = ?", username)
+    gatheredhash = c2.fetchall()
+    password.append(gatheredhash)
+    password = hashlib.sha256(password.encode()).hexdigest()
+    if attempts < 3:
+        c2.execute("SELECT * FROM studentaccounts WHERE username = ? AND password = ?", username, password)
+        data = c2.fetchall()
+        if data:
+            print("Login successful.")
+            conn2.close()
+            student.StudentMenu()
+        else:
+            print("Login failed.")
+            attempts += 1
+            loginarea.StudentLogin()
+    else:
+        print("Too many failed attempts")
+        exit()

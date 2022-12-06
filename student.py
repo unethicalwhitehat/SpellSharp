@@ -1,3 +1,6 @@
+import loginarea
+
+
 def StudentMenu(username):
     print(f'''
     Welcome {username}, please select an option from below:
@@ -18,7 +21,7 @@ def StudentMenu(username):
         # ViewResults()
         print("Results")
     elif option == "3":
-        login.Login()
+        loginarea.StudentLogin()
     else:
         print("Please enter a valid option.")
         StudentMenu()
