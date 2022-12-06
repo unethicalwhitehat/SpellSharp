@@ -24,9 +24,9 @@ def MainMenu():
             print("Please enter a number.")
             ChooseOption()
         if choice == 1:
-            loginarea.Login("S")
+            loginarea.ChooseOption("S")
         elif choice == 2:
-            loginarea.Login("T")
+            loginarea.ChooseOption("T")
         elif choice == 3:
             exit()
         else:
