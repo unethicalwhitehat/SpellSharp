@@ -5,6 +5,7 @@
 import loginarea
 import os
 import time
+# import fts
 
 
 # Function for the main menu
@@ -22,7 +23,6 @@ def MainMenu():
 
     def ChooseOption():
         choice = input("Enter your choice: ")
-        time.sleep(1)
         try:
             choice = int(choice)
         except ValueError:
@@ -39,11 +39,15 @@ def MainMenu():
             print("Goodbye")
             time.sleep(5)
             exit()
+        # elif choice == 4:
+        #     print("Running first time setup...")
+        #     time.sleep(1)
+        #     fts.FirstTimeSetup()
         else:
             time.sleep(1)
             print("Please enter a valid choice.")
 
-    os.system('clear')
+    # os.system('clear')
     ChooseOption()
 
 

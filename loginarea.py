@@ -43,7 +43,7 @@ def ChooseOption(usertype):
             StudentLogin()
         elif choice == 2:
             time.sleep(1)
-            main.MainMenu()
+            exit()
     elif usertype == "T":
         print('''
         Welcome, teacher. Please select an option from below:
@@ -84,18 +84,18 @@ def EnterDob():
         EnterDob()
 
 
-def EnterYear():
-    year = input("Enter the year group you're in (3, 4, 5 or 6)")
+def EnterYearGroup():
+    yeargroup = input("Enter the year group you're in (3, 4, 5 or 6)")
     try:
-        year = int(year)
+        year = int(yeargroup)
         if 3 > year > 6:
             print("Please ensure you have entered the correct year")
-            EnterYear()
+            EnterYearGroup()
         else:
             return year
     except ValueError:
         print("You must enter a number. Please try again")
-        EnterYear()
+        EnterYearGroup()
 
 
 def TeacherSignUp():
@@ -103,26 +103,28 @@ def TeacherSignUp():
     lname = input("Please enter your last name: ")
     username = f"{fname[0:1]}.{lname}{random.randint(0, 100)}".lower()
     dob = EnterDob()
-    password = getpass.getpass("Enter password: ")
-    special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-    if (len(password) < 8) or (password == username) or (password.isalpha()) or (password.isnumeric()) or (
-            special_char.search(password) is None):
-        print(
-            "Please enter a valid password. Your password must be at least 8 characters long, it cannot be your username, and must contain letters, numbers, and a symbol.")
-        ChooseOption("T")
-    else:
-        salt = GenSalt()
-        saltedpassword = password + salt
-        saltedpassword = hashlib.sha256(password.encode()).hexdigest()
-        dblogin.TeacherSignUp(fname, lname, dob, username, password, salt)
-        print(f"Sign up successful. Your username is {username}")
+    def CreatePassword():
+        password = getpass.getpass("Enter password: ")
+        # password = input("Enter password: ")
+        special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+        if (len(password) < 8) or (password == username) or (password.isalpha()) or (password.isnumeric()) or (special_char.search(password) is None):
+            print("Please enter a valid password. Your password must be at least 8 characters long, it cannot be your username, and must contain letters, numbers, and a symbol.")
+            CreatePassword()
+        else:
+            return password
+    password = CreatePassword()
+    salt = GenSalt()
+    saltedpassword = password + salt
+    saltedpassword = hashlib.sha256(password.encode()).hexdigest()
+    dblogin.TeacherSignUp(fname, lname, dob, username, saltedpassword, salt)
+    print(f"Sign up successful. Your username is {username}")
 
 
 def StudentSignUp():
     fname = input("Enter your first name")
     lname = input("Enter your last name")
     dob = EnterDob()
-    year = EnterYear()
+    yeargroup = EnterYearGroup()
     teacher = input("Enter the last name of your teacher: ")
     username = f"{fname}.{lname}{random.randint(100, 1000)}".lower()
     password = getpass.getpass("Choose a password")
@@ -137,7 +139,7 @@ def StudentSignUp():
         salt = GenSalt()
         saltedpassword = password + salt
         saltedpassword = hashlib.sha256(password.encode()).hexdigest()
-        dblogin.StudentSignUp(fname, lname, dob, username, password, salt, year, teacher)
+        dblogin.StudentSignUp(fname, lname, dob, username, saltedpassword, salt, yeargroup, teacher)
         print(f"Sign up successful. Your username is {username}")
         time.sleep(3)
         print("Taking you go the login page...")
@@ -153,17 +155,3 @@ def TeacherLogin():
 
 def StudentLogin():
     print("Student login")
-
-# def LogIn():
-#     username = input("Enter username: ")
-#     password = getpass.getpass("Enter password: ")
-#     password = hashlib.sha256(password.encode()).hexdigest()
-#     dblogin.LogIn(username, password)
-#
-# if action == "login":
-#     LogIn()
-# elif action == "signup":
-#     SignUp(usertype)
-# else:
-#     print("Please enter a valid action.")
-#     Login(usertype)

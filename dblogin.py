@@ -16,33 +16,47 @@ c2 = conn2.cursor()
 if os.path.exists("teacheraccounts.db"):
     pass
 else:
-    c.execute('''
-    CREATE TABLE teacheraccounts
-    (fname text), (lname text), (dob datetime), (username text), (password text), (salt text)''')
+    c.execute("""CREATE TABLE teacheraccounts (
+                fname text,
+                lname text,
+                dob integer,
+                username text,
+                password text,
+                salt text
+                )""")
+
+conn.commit()
 
 if os.path.exists("studentaccounts.db"):
     pass
 else:
-    c.execute('''
-    CREATE TABLE studentaccounts
-    (fname text), (lname text), (dob datetime), (username text), (password text), (salt text), (usertype text), (year text), (teacher text) ''')
+    c2.execute("""CREATE TABLE studentaccounts (
+                fname text,
+                lname text, 
+                dob integer,
+                username text,
+                password text,
+                salt text,
+                yeargroup integer,
+                teacher text
+                )""")
 
+conn2.commit()
 
 def TeacherSignUp(fname, lname, dob, username, password, salt):
     c.execute("INSERT INTO teacheraccounts VALUES (?, ?, ?, ?, ?, ?)", (fname, lname, dob, username, password, salt))
     conn.commit()
     print("Teacher created successfully.")
     conn.close()
-    TeacherLogin()
+    TeacherLogin(username, password, 0)
 
 
-def StudentSignUp(fname, lname, dob, username, password, salt, year, teacher):
-    c2.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-               (fname, lname, dob, username, password, salt, year, teacher))
+def StudentSignUp(fname, lname, dob, username, password, salt, yeargroup, teacher):
+    c2.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (fname, lname, dob, username, password, salt, yeargroup, teacher))
     conn.commit()
     print("Student account created successfully.")
     conn2.close()
-    StudentLogin(username, password)
+    StudentLogin(username, password, 0)
 
 
 def TeacherLogin(username, password, attempts=0):
