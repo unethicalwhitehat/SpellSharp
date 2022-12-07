@@ -48,10 +48,10 @@ def StudentSignUp(fname, lname, dob, username, password, salt, year, teacher):
 def TeacherLogin(username, password, attempts=0):
     c.execute("SELECT hash FROM teacheraccounts WHERE username = ?", username)
     gatheredhash = c.fetchall()
-    password.append(gatheredhash)
-    password = hashlib.sha256(password.encode()).hexdigest()
+    saltedpassword = password + gatheredhash
+    saltedpassword = hashlib.sha256(password.encode()).hexdigest()
     if attempts < 3:
-        c.execute("SELECT * FROM teacheraccounts WHERE username = ? AND password = ?", (username, password))
+        c.execute("SELECT * FROM teacheraccounts WHERE username = ? AND password = ?", (username, saltedpassword))
         data = c.fetchall()
         if data:
             print("Login successful.")
@@ -69,10 +69,10 @@ def TeacherLogin(username, password, attempts=0):
 def StudentLogin(username, password, attempts=0):
     c2.execute("SELECT hash FROM studentaccounts WHERE username = ?", username)
     gatheredhash = c2.fetchall()
-    password.append(gatheredhash)
-    password = hashlib.sha256(password.encode()).hexdigest()
+    saltedpassword = password + gatheredhash
+    saltedpassword = hashlib.sha256(password.encode()).hexdigest()
     if attempts < 3:
-        c2.execute("SELECT * FROM studentaccounts WHERE username = ? AND password = ?", username, password)
+        c2.execute("SELECT * FROM studentaccounts WHERE username = ? AND password = ?", username, saltedpassword)
         data = c2.fetchall()
         if data:
             print("Login successful.")

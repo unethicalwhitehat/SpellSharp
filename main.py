@@ -26,8 +26,7 @@ def MainMenu():
         try:
             choice = int(choice)
         except ValueError:
-            print("Please enter a number.")
-            time.sleep(1)
+            print("Please enter a number")
             ChooseOption()
         if choice == 1:
             time.sleep(1)

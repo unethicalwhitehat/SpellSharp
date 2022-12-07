@@ -3,9 +3,6 @@
 import base64
 import getpass
 import os
-import main
-import teacher
-import student
 import hashlib
 import dblogin
 import re
@@ -68,13 +65,13 @@ def ChooseOption(usertype):
         elif choice == 2:
             TeacherSignUp()
         elif choice == 3:
-            main.MainMenu()
+            exit()
         else:
             print("Please enter a valid choice.")
             ChooseOption(usertype)
     else:
         print("Please enter a valid user type.")
-        main.ChooseOption()
+        exit()
 
 
 def EnterDob():
@@ -115,8 +112,8 @@ def TeacherSignUp():
         ChooseOption("T")
     else:
         salt = GenSalt()
-        password.append(salt)
-        password = hashlib.sha256(password.encode()).hexdigest()
+        saltedpassword = password + salt
+        saltedpassword = hashlib.sha256(password.encode()).hexdigest()
         dblogin.TeacherSignUp(fname, lname, dob, username, password, salt)
         print(f"Sign up successful. Your username is {username}")
 
@@ -138,8 +135,8 @@ def StudentSignUp():
         StudentSignUp()
     else:
         salt = GenSalt()
-        password.append(salt)
-        password = hashlib.sha256(password.encode()).hexdigest()
+        saltedpassword = password + salt
+        saltedpassword = hashlib.sha256(password.encode()).hexdigest()
         dblogin.StudentSignUp(fname, lname, dob, username, password, salt, year, teacher)
         print(f"Sign up successful. Your username is {username}")
         time.sleep(3)
