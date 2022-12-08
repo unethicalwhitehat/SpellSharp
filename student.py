@@ -13,15 +13,21 @@ def StudentMenu(username):
     
     ----------------------------------------------------\n
     ''')
-    option = input("Please enter your option: ")
-    if option == "1":
-        # TakeTest()
-        print("Test")
-    elif option == "2":
-        # ViewResults()
-        print("Results")
-    elif option == "3":
-        loginarea.StudentLogin()
-    else:
-        print("Please enter a valid option.")
-        StudentMenu()
+    def ChooseOption():
+        choice = input("Please enter your option: ")
+        try:
+            choice = int(choice)
+        except ValueError:
+            print("Please enter a number.")
+            ChooseOption()
+        if option == "1":
+            # TakeTest()
+            print("Test")
+        elif option == "2":
+            # ViewResults()
+            print("Results")
+        elif option == "3":
+            loginarea.StudentLogin()
+        else:
+            print("Please enter a valid option.")
+            StudentMenu()
