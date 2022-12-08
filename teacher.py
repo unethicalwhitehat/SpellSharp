@@ -16,7 +16,7 @@ def TeacherMenu(username):
     -------------------------------------------------------
     ''')
     def ChooseOption():
-        option = input("Please enter your option: ")
+        choice = input("Please enter your option: ")
         if option == "1":
             time.sleep(1)
             CreateTest()
@@ -36,3 +36,13 @@ def TeacherMenu(username):
 
 def CreateTest():
     os.system('clear')
+
+    # Set up test gives option to create a test or edit an existing test (if there is one)
+
+    # View options shows scores table with options to filter
+
+    # Settings allows you to change your password
+
+    # Student account management allows you to add, remove or edit students and view their scores
+
+    # Log out logs you out and returns to the main menu
