@@ -3,7 +3,6 @@ import os
 import time
 
 
-
 def FirstTimeSetup():
     conn = sqlite3.connect("teacheraccounts.db")
     conn2 = sqlite3.connect("studentaccounts.db")
@@ -71,3 +70,4 @@ def FirstTimeSetup():
     print("First time setup complete. Five databases have been created.")
     time.sleep(3)
     os.system('clear')
+    return

@@ -24,7 +24,7 @@ def MainMenu():
     # Function to choose an option
 
     def ChooseOption():
-        choice = input("Enter your choice: ")
+        choice = input("Please enter your choice: ")
         try:
             choice = int(choice)
         except ValueError:
@@ -53,7 +53,6 @@ def MainMenu():
             time.sleep(1)
             print("Please enter a valid choice.")
 
-    # os.system('clear')
     ChooseOption()
 
 

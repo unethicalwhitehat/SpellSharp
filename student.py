@@ -13,6 +13,7 @@ def StudentMenu(username):
     
     ----------------------------------------------------\n
     ''')
+
     def ChooseOption():
         choice = input("Please enter your option: ")
         try:
@@ -31,6 +32,3 @@ def StudentMenu(username):
         else:
             print("Please enter a valid option.")
             StudentMenu()
-
-
-
