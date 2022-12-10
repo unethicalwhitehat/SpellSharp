@@ -1,26 +1,23 @@
+# Module to handle the login and sign up areas of the program
+
 # Importing the necessary modules
 
-import base64
-import getpass
-import os
-import hashlib
-import dblogin
-import re
-import random
-import datetime
-import time
+import base64 # For encoding and decoding the salt
+import getpass # For hiding the password when typing
+import os # For generating the salt
+import hashlib # For hashing the password
+import dblogin # For logging in
+import re # For checking if the password is valid
+import random # For generating the random questions
+import datetime # For serialising the date for the database
+import time # For delays
 
-
-# Function to generate the salt for the password
-
-def GenSalt():
-    salt = os.urandom(32)
-    salt = base64.b64encode(salt).decode('utf-8')
-    return salt
-
+# Function to show the options for the users based on their type and to take an input to proceed.
 
 def ChooseOption(usertype):
+    
     if usertype == "S":
+        
         print(f'''
         -------------------------------------------------------
         Welcome student, please select an option from below:
@@ -29,29 +26,38 @@ def ChooseOption(usertype):
         2) Back
         -------------------------------------------------------
         ''')
+
         choice = input("Please enter your choice: ")
+
         time.sleep(1)
+
         try:
             choice = int(choice)
+        
         except ValueError:
             time.sleep(1)
             print("Please enter a number.")
             time.sleep(2)
             ChooseOption(usertype)
+
         if choice == 1:
             time.sleep(1)
             os.system('clear')
             StudentLogin()
+
         elif choice == 2:
             time.sleep(1)
             os.system('clear')
             return
+
         else:
             time.sleep(1)
             print("Please enter a valid choice.")
             time.sleep(2)
             ChooseOption(usertype)
+    
     elif usertype == "T":
+        
         print(f'''
         --------------------------------------------------------
         Welcome, teacher. Please select an option from below:
@@ -63,30 +69,37 @@ def ChooseOption(usertype):
         ''')
 
         choice = input("Please enter your choice: ")
+
         try:
             choice = int(choice)
+
         except ValueError:
             time.sleep(1)
             print("Please enter a number.")
             time.sleep(2)
             ChooseOption(usertype)
+
         if choice == 1:
             time.sleep(1)
             os.system('clear')
             TeacherLogin()
+
         elif choice == 2:
             time.sleep(1)
             os.system('clear')
             TeacherSignUp()
+
         elif choice == 3:
             time.sleep(1)
             os.system('clear')
             return
+
         else:
             time.sleep(1)
             print("Please enter a valid choice.")
             time.sleep(2)
             ChooseOption(usertype)
+            
     else:
         print("Please enter a valid user type.")
         time.sleep(2)
@@ -179,3 +192,12 @@ def StudentLogin(attempts=0):
     username = input("Please enter your username: ")
     password = getpass.getpass("Enter your password: ")
     dblogin.StudentLogin(username, password, attempts)
+
+
+# Function to generate the salt for the password
+
+def GenSalt():
+    salt = os.urandom(32)
+    salt = base64.b64encode(salt).decode('utf-8')
+    return salt
+
