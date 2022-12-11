@@ -1,4 +1,4 @@
-import loginarea
+import login_area
 import os
 import time
 
