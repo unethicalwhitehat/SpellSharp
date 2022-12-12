@@ -6,10 +6,13 @@ import time
 import login_area
 import student_testing
 import student_results
+from clear_screen import ClearScreen
 
 # Function to show the student menu and take an input to proceed.
 
 def StudentMenu(fname, username):
+
+    ClearScreen()
 
     print(f'''
     ----------------------------------------------------
@@ -37,6 +40,7 @@ def StudentMenu(fname, username):
         elif choice == "2":
             student_results.Menu(fname, username)
         elif choice == "3":
+            ClearScreen()
             login_area.StudentLogin()
         else:
             print("Please enter a valid option.")

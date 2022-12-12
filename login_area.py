@@ -6,7 +6,7 @@ import base64
 from getpass import getpass
 import hashlib
 import os
-import dblogin
+import db_login
 import re
 import random
 from datetime import datetime
@@ -156,7 +156,7 @@ def TeacherSignUp():
     salt = GenSalt()
     saltedpassword = password + salt
     saltedpassword = hashlib.sha256(saltedpassword.encode()).hexdigest()
-    dblogin.TeacherSignUp(fname, lname, dob, username, saltedpassword, salt)
+    db_login.TeacherSignUp(fname, lname, dob, username, saltedpassword, salt)
 
 # Function to handle a student signing up.
 
@@ -180,7 +180,7 @@ def StudentSignUp():
     salt = GenSalt()
     saltedpassword = password + salt
     saltedpassword = hashlib.sha256(saltedpassword.encode()).hexdigest()
-    dblogin.StudentSignUp(fname, lname, dob, username,
+    db_login.StudentSignUp(fname, lname, dob, username,
                           saltedpassword, salt, yeargroup, teachername)
 
 # Function to handle a teacher logging in
@@ -188,14 +188,14 @@ def StudentSignUp():
 def TeacherLogin(attempts=0):
     username = input("Please enter your username:\n> ")
     password = getpass("Please your password:\n> ")
-    dblogin.TeacherLogin(username, password, attempts)
+    db_login.TeacherLogin(username, password, attempts)
 
 # Function to handle a student logging in
 
 def StudentLogin(attempts=0):
     username = input("Please enter your username:\n> ")
     password = getpass("Enter your password:\n> ")
-    dblogin.StudentLogin(username, password, attempts)
+    db_login.StudentLogin(username, password, attempts)
 
 # Function to generate the salt for the password
 
