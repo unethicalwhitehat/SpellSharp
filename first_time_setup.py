@@ -19,17 +19,17 @@ def FirstTimeSetup():
     -------------------------------------------
     ''')
 
+    time.sleep(3)
+
     ClearScreen()
 
-    conn = sqlite3.connect("spellr.db")
-
-    print("Database created.")
+    conn = sqlite3.connect("spellsharp.db")
 
     c = conn.cursor()
 
     try:
         c.execute("""CREATE TABLE teacheraccounts (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     fname text,
                     lname text,
                     dob integer,
@@ -37,12 +37,13 @@ def FirstTimeSetup():
                     saltedpassword text,
                     salt text
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
 
     try:
         c.execute("""CREATE TABLE studentaccounts (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     fname text,
                     lname text, 
                     dob integer,
@@ -52,47 +53,52 @@ def FirstTimeSetup():
                     class text,
                     teacher text
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
 
     try:
         c.execute("""CREATE TABLE scores (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     username text,
                     testdate integer,
                     score integer,
                     testid integer
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
     
     try:
         c.execute("""CREATE TABLE spellings (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     word text,
                     definition text
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
 
     try:
         c.execute("""CREATE TABLE tests (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     testid text,
                     testdate integer,
                     testword text,
                     testdefinition text
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
 
     try:
         c.execute("""CREATE TABLE classes (
-                    integer PRIMARY KEY AUTOINCREMENT,
+                    ID integer PRIMARY KEY AUTOINCREMENT,
                     class text,
                     teacher text
                     )""")
-    except sqlite3.OperationalError:
+    except sqlite3.OperationalError as ex:
+        print("Error creating table: " + str(ex))
         pass
 
     conn.commit()
@@ -141,3 +147,15 @@ def FirstTimeSetup():
 # q: Fantastic, thanks
 
 # a: No problem
+
+# On line 139 you said I could use the cursor.lastrowid function. Is the rowid the same as the integer?
+
+# Yes, the rowid is the same as the integer.
+
+# What if I specify a different value for the integer at some point so it changes it?
+
+# The rowid will still be the same as the integer.
+
+# What if I delete an entry from the table?
+
+# The rowid will still be the same as the integer.

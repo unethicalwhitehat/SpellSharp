@@ -19,7 +19,7 @@ c = conn.cursor()
 
 def TeacherSignUp(fname, lname, dob, username, saltedpassword, salt):
 
-    c.execute("INSERT INTO teacheraccounts VALUES (?, ?, ?, ?, ?, ?)",
+    c.execute("INSERT INTO teacheraccounts VALUES (null, ?, ?, ?, ?, ?, ?)",
               (fname, lname, dob, username, saltedpassword, salt))
     print(f"Teacher account created successfully. Your username is {username}")
     time.sleep(3)
@@ -30,7 +30,7 @@ def TeacherSignUp(fname, lname, dob, username, saltedpassword, salt):
 
 def StudentSignUp(fname, lname, dob, username, saltedpassword, salt, yeargroup, teachername):
 
-    c.execute("INSERT INTO studentaccounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    c.execute("INSERT INTO studentaccounts VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)",
               (fname, lname, dob, username, saltedpassword, salt, yeargroup, teachername))
     print(f"Student account created successfully. Your username is {username}")
     time.sleep(3)
@@ -53,7 +53,7 @@ def TeacherLogin(username, password, attempts=0):
         time.sleep(1)
         print("User does not exist")
         time.sleep(2)
-        login_area.ChooseOption("T")
+        login_area.LoginMenu("T")
 
     saltedpassword = password + gatheredsalt
     hashedpassword = hashlib.sha256(saltedpassword.encode('utf-8')).hexdigest()
@@ -62,7 +62,7 @@ def TeacherLogin(username, password, attempts=0):
         c.execute("SELECT * FROM teacheraccounts WHERE username = ? AND hashedpassword = ?",
                   (username, hashedpassword))
         data = c.fetchall()
-        print(data)
+
         try:
             data = str(data[0])
         except TypeError:
@@ -116,4 +116,5 @@ def StudentLogin(username, password, attempts=0):
             login_area.StudentLogin(attempts)
     else:
         print("Too many failed attempts")
-        exit()
+        time.sleep(3)
+        return

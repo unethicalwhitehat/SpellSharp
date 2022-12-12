@@ -36,11 +36,14 @@ def Menu(fname):
         if choice == 1:
             CreateNewTest()
         elif choice == 2:
-            ReassignOldTest()
+            # ReassignOldTest()
+            return
         elif choice == 3:
-            ViewOldTests()
+            # ViewOldTests()
+            return
         elif choice == 4:
-            AddVocabulary()
+            # AddVocabulary()
+            return
         elif choice == 5:
             return
         else:
@@ -79,9 +82,11 @@ def CreateNewTest():
         if choice == 1:
             CreateNewTest_Manually()
         elif choice == 2:
-            CreateNewTest_Internet()
+            # CreateNewTest_Internet()
+            return
         elif choice == 3:
-            CreateNewTest_Database()
+            # CreateNewTest_Database()
+            return
         elif choice == 4:
             return
         else:
@@ -179,11 +184,14 @@ def AddManuallyToDatabase(words, definitions):
     for i in range(len(words)):
         c.execute("INSERT INTO spellings VALUES (:word, :definition)", {"word": words[i], "definition": definitions[i]})
 
+    c.execute("SELECT * FROM spellings WHERE integer = cursor.lastrowid")
+    print(c.fetchall())
+
     conn.commit()
     conn.close()
 
 
-def CreateNewTest_Internet():
+# def CreateNewTest_Internet():
 
 
-def CreateNewTest_Database():
+# def CreateNewTest_Database():
